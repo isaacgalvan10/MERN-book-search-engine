@@ -4,18 +4,12 @@ const { signToken } = require('../utils/auth');
 
 const resolvers = {
   Query: {
-    user: async (parent, { _id }) => {
-      return User.findOne(_id);
-    },
-    books: async (parent, { _id }) => {
-      const params = _id ? { _id } : {};
-      return Book.find(params);
-    },
     me: async (parent, args, context) => {
-      if (context.user) {
-        return User.findOne({ _id: context.user._id });
-      }
-      throw new AuthenticationError('You need to be logged in!');
+      return User.findOne();
+      // if (context.user) {
+      //   return User.findOne({ _id: context.user._id });
+      // }
+      // throw new AuthenticationError('You need to be logged in!');
     },
   },
 
@@ -53,7 +47,7 @@ const resolvers = {
       throw new AuthenticationError('You need to be logged in!');
     },
 
-    deleteBook: async (parent, { params }, context) => {
+    removeBook: async (parent, { params }, context) => {
       if (context.user) {
         User.findOneAndUpdate(
           { _id: context.user._id },
